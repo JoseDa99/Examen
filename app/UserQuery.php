@@ -23,4 +23,14 @@ class UserQuery extends QueryBuilder
             'last_login_at' => $subselect,
         ]);
     }
+
+    public function withTeamOrNot($team) {
+            if ($team === 'with_team') {
+                $this->has('team');
+            } elseif ($team === 'without_team') {
+                $this->doesntHave('team');
+            }
+            return $this;
+
+    }
 }
