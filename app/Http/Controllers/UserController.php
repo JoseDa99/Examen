@@ -95,6 +95,24 @@ class UserController extends Controller
         return redirect()->route('users');
     }
 
+    public function restore($id)
+    {
+
+        $user = User::withTrashed()
+            ->where('id', $id)
+            ->restore();
+        DB::transaction(function () use ($id) {
+            DB::table('skill_user')
+                    ->where('user_id', $id)
+                    ->update(['deleted_at' => null]);
+            DB::table('user_profiles')
+                ->where('user_id', $id)
+                ->update(['deleted_at' => null]);
+
+        });
+
+        return redirect()->route('users.trashed');
+    }
     /*public function trashed(Sortable $sortable)
     {
         $users = User::onlyTrashed()

@@ -29,6 +29,8 @@ Route::get('usuarios/{user}/editar', 'UserController@edit')->name('users.edit');
 Route::patch('usuarios/{user}/papelera', 'UserController@trash')
     ->name('users.trash');
 
+Route::get('usuarios/{user}/papelera', 'UserController@restore')->name('user.restore');
+
 Route::get('usuarios/{user}', 'UserController@show')
     ->name('user.show');
 
