@@ -227,6 +227,33 @@ class CreateUsersTest extends TestCase
     }
 
     /** @test */
+    function the_bio_must_be_valid()
+    {
+        $this->withExceptionHandling();
+
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', $this->getValidData([
+                'bio' => ''
+            ]))
+            ->assertSessionHasErrors(['bio']);
+
+        $this->assertDatabaseEmpty('users');
+    }
+    /** @test */
+    function the_twitter_must_be_valid()
+    {
+        $this->withExceptionHandling();
+
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', $this->getValidData([
+                'twitter' => 'no-es-una-url'
+            ]))
+            ->assertSessionHasErrors(['twitter']);
+
+        $this->assertDatabaseEmpty('users');
+    }
+
+    /** @test */
     function only_not_deleted_professions_can_be_selected()
     {
         $this->withExceptionHandling();

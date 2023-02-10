@@ -266,4 +266,36 @@ class UpdateUsersTest extends TestCase
 
         $this->assertDatabaseMissing('users', ['first_name' => 'Pepe']);
     }
+
+    /** @test  */
+    function the_bio_must_be_valid()
+    {
+        $this->withExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->getValidData([
+                'bio' => '',
+            ]))->assertRedirect('usuarios/' . $user->id . '/editar')
+            ->assertSessionHasErrors(['bio']);
+
+        $this->assertDatabaseMissing('users', ['first_name' => 'Pepe']);
+    }
+
+    /** @test  */
+    function the_twitter_must_be_valid()
+    {
+        $this->withExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->getValidData([
+                'twitter' => 'no-es-una-url',
+            ]))->assertRedirect('usuarios/' . $user->id . '/editar')
+            ->assertSessionHasErrors(['twitter']);
+
+        $this->assertDatabaseMissing('users', ['first_name' => 'Pepe']);
+    }
 }
